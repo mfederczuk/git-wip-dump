@@ -5,12 +5,26 @@
 
 # git-wip-dump #
 
-[version_shield]: https://img.shields.io/badge/version-N%2FA_(in_development)-important.svg
-![version: N/A (in development)][version_shield]
+[version_shield]: https://img.shields.io/badge/version-0.1.0-informational.svg
+[release_page]: https://github.com/mfederczuk/git-wip-dump/releases/tag/v0.1.0 "Release v0.1.0"
+[![version: 0.1.0][version_shield]][release_page]
+[![Changelog](https://img.shields.io/badge/-Changelog-informational.svg)](CHANGELOG.md "Changelog")
 
 ## About ##
 
 `git-wip-dump` is a custom Git command to temporarily save uncommitted work into a commit and restore it afterwards.
+
+## Usage ##
+
+Current the command only has two subcommands: `save`, which will create a WIP commit, and `restore`, which will reset
+the WIP commit again.
+
+With `save`, the option `--push` can also be given to also push the commit to the tracked upstream branch.
+
+## Download & Installation ##
+
+Simply download the [`git-wip-dump`](git-wip-dump) file and place it into a directory that is inside your `PATH`
+environment variable.
 
 ## Contributing ##
 
