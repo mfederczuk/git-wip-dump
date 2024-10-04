@@ -306,8 +306,15 @@ git_wip_dump_save() {
 
 #endregion
 
+#region subcommand: restore
+
+# stdin: message
+is_commit_message_from_us() {
+	grep -Eq '^\[git-wip-dump:[[:space:]]*v0+\.[0-9]+\.[0-9]+(-(indev|rc)[0-9]+)?\]$'
+}
+
 git_wip_dump_restore() {
-	if ! git show --no-patch --pretty=format:%b HEAD | grep -Eq '^\[git-wip-dump:[[:space:]]*v0+\.[0-9]+\.[0-9]+(-(indev|rc)[0-9]+)?\]$'; then
+	if ! git show --no-patch --pretty=format:%b HEAD | is_commit_message_from_us; then
 		printf 'The currently checked out commit does not appear to be WIP commit created by git-wip-dump. Continue anyway? [y/N] ' >&2
 
 		read -r ans
@@ -331,6 +338,8 @@ git_wip_dump_restore() {
 
 	git reset --mixed "$parent_commit_hashes"
 }
+
+#endregion
 
 case "$subcommand" in
 	('save')
