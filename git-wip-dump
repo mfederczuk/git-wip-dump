@@ -69,29 +69,29 @@ git_wip_dump_version() {
 # region args
 
 print_usage() {
-	echo "usage: $argv0 save [--push]"
-	echo "   or: $argv0 restore"
+	printf 'usage: %s save [--push]\n' "$argv0"
+	printf '   or: %s restore\n' "$argv0"
 }
 
 print_help() {
 	print_usage
-	echo
-	echo '    --push                also push the created commit to the tracked upstream'
+	printf '\n'
+	printf '    --push                also push the created commit to the tracked upstream\n'
 }
 
 print_version_info() {
-	echo "git-wip-dump $(git_wip_dump_version)"
-	echo
-	echo 'Copyright (C) 2024 Michael Federczuk'
-	echo
-	echo '    License MPL-2.0: Mozilla Public License 2.0 <https://www.mozilla.org/en-US/MPL/2.0/>'
-	echo '            AND'
-	echo '    License Apache-2.0: Apache License 2.0 <https://www.apache.org/licenses/LICENSE-2.0>'
-	echo
-	echo 'This is free software: you are free to change and redistribute it.'
-	echo 'There is NO WARRANTY, to the extent permitted by law.'
-	echo
-	echo 'Written by Michael Federczuk.'
+	printf 'git-wip-dump %s\n' "$(git_wip_dump_version)"
+	printf '\n'
+	printf 'Copyright (C) 2024 Michael Federczuk\n'
+	printf '\n'
+	printf '    License MPL-2.0: Mozilla Public License 2.0 <https://www.mozilla.org/en-US/MPL/2.0/>\n'
+	printf '            AND\n'
+	printf '    License Apache-2.0: Apache License 2.0 <https://www.apache.org/licenses/LICENSE-2.0>\n'
+	printf '\n'
+	printf 'This is free software: you are free to change and redistribute it.\n'
+	printf 'There is NO WARRANTY, to the extent permitted by law.\n'
+	printf '\n'
+	printf 'Written by Michael Federczuk.\n'
 }
 
 subcommand=''
@@ -190,7 +190,7 @@ unset -v process_opts
 
 if ! $subcommand_set; then
 	{
-		echo "$argv0: missing argument: ( save | restore )"
+		printf '%s: missing argument: ( save | restore )\n' "$argv0"
 		print_usage
 	} >&2
 	exit 3
@@ -199,9 +199,9 @@ fi
 case "$subcommand" in
 	('')
 		if [ $excess_argc -eq 0 ]; then
-			echo "$argv0: argument must not be empty"
+			printf '%s: argument must not be empty\n' "$argv0"
 		else
-			echo "$argv0: argument #1: must not be empty"
+			printf '%s: argument #1: must not be empty\n' "$argv0"
 		fi >&2
 		print_usage >&2
 
@@ -217,20 +217,20 @@ case "$subcommand" in
 				;;
 			("$opt_push_yes")
 				{
-					echo "$argv0: restore: --push: invalid option"
+					printf '%s: restore: --push: invalid option\n' "$argv0"
 					print_usage
 				} >&2
 				exit 5
 				;;
 			("$opt_push_no")
-				echo "$argv0: restore: --no-push: invalid option" >&2
+				printf '%s: restore: --no-push: invalid option\n' "$argv0" >&2
 				exit 5
 				;;
 		esac
 		;;
 	(*)
 		{
-			echo "$argv0: $subcommand: unknown subcommand"
+			printf '%s: %s: unknown subcommand\n' "$argv0" "$subcommand"
 			print_usage
 		} >&2
 		exit 8
@@ -239,14 +239,14 @@ esac
 
 if [ $excess_argc -gt 0 ]; then
 	{
-		echo "$argv0: too many arguments: $excess_argc"
+		printf '%s: too many arguments: %s\n' "$argv0" "$excess_argc"
 		print_usage
 	} >&2
 	exit 4
 fi
 
 if [ -n "$invalid_opt" ]; then
-	echo "$argv0: $invalid_opt: invalid option" >&2
+	printf '%s: %s: invalid option\n' "$argv0" "$invalid_opt" >&2
 	exit 5
 fi
 
@@ -286,7 +286,7 @@ git_wip_dump_restore() {
 				# continue
 				;;
 			(*)
-				echo "aborted." >&2
+				printf 'aborted.\n' >&2
 				exit 32
 				;;
 		esac
@@ -295,7 +295,7 @@ git_wip_dump_restore() {
 	parent_commit_hashes="$(git show --no-patch --pretty=format:%P HEAD)"
 
 	if printf '%s' "$parent_commit_hashes" | grep -Eq '[^0-9a-fA-F]'; then
-		echo "fatal: HEAD has multiple parents (is a merge). aborting." >&2
+		printf 'fatal: HEAD has multiple parents (is a merge). aborting.\n' >&2
 		exit 33
 	fi
 
