@@ -254,27 +254,45 @@ unset -v invalid_opt excess_argc subcommand_set
 
 # endregion
 
+#region subcommand: save
+
+get_default_wip_commit_message() {
+	printf '::: Temporary Commit - WIP Changes :::\n'
+
+	printf '\n'
+
+	printf 'Use\n'
+	printf '        git reset --mixed {commit_hash}\n'
+	printf 'to reset this commit and continue working.'
+}
+
+# $1: commit hash
+get_wip_commit_message() {
+	set -- "$1" "$(git config get --default='' wip-dump.message)"
+
+	if [ -z "$2" ]; then
+		set -- "$1" "$(get_default_wip_commit_message)"
+	fi
+
+	printf '%s' "$2" | sed s/'{commit_hash}'/"$1"/g
+}
+
 git_wip_dump_save() {
-	nl="$(printf '\nx')"
-	nl="${nl%x}"
+	set -- "$(git show --no-patch --pretty=format:%h HEAD)"
+	set -- "$(get_wip_commit_message "$1")"
 
-	commit_hash="$(git show --no-patch --pretty=format:%h HEAD)"
-
-	commit_message_subject_line='::: Temporary Commit - WIP Changes :::'
-	commit_message_body_paragraph1="Use${nl}        git reset --mixed ${commit_hash}${nl}to reset this commit and continue working."
-	commit_message_body_paragraph2="[git-wip-dump: v$(git_wip_dump_version)]"
+	set -- "$1" "[git-wip-dump: v$(git_wip_dump_version)]"
 
 	git add --all
 
-	git commit --no-verify \
-	           --message="$commit_message_subject_line"    \
-	           --message="$commit_message_body_paragraph1" \
-	           --message="$commit_message_body_paragraph2"
+	git commit --no-verify --message="$1" --message="$2"
 
 	if [ "$opt_push" = "$opt_push_yes" ]; then
 		git push --force --verbose --no-verify
 	fi
 }
+
+#endregion
 
 git_wip_dump_restore() {
 	if ! git show --no-patch --pretty=format:%b HEAD | grep -Eq '^\[git-wip-dump:[[:space:]]*v0+\.[0-9]+\.[0-9]+(-(indev|rc)[0-9]+)?\]$'; then

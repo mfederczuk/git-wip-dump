@@ -13,6 +13,10 @@ and this project adheres to [**Semantic Versioning v2.0.0**](https://semver.org/
 
 ## Unreleased ##
 
+### Added ###
+
+* The commit message is now customizable using the Git config `wip-dump.message`
+
 ### Changed ###
 
 * The `--help` and `--version` options now write to `stdout` instead of `stderr`
