@@ -55,7 +55,7 @@ char_at() {
 }
 
 readonly git_wip_dump_version_major=0
-readonly git_wip_dump_version_minor=1
+readonly git_wip_dump_version_minor=2
 readonly git_wip_dump_version_patch=0
 readonly git_wip_dump_version_pre_release=''
 git_wip_dump_version() {
