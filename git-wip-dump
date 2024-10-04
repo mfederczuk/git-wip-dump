@@ -3,17 +3,46 @@
 # vim: syntax=sh
 # code: language=shellscript
 
-# Copyright (c) 2022 Michael Federczuk
+# Copyright (c) 2024 Michael Federczuk
 # SPDX-License-Identifier: MPL-2.0 AND Apache-2.0
+
+#region preamble
+
+case "$-" in
+	(*'i'*)
+		\command printf 'script was called interactively\n' >&2
+		return 124
+		;;
+esac
 
 set -o errexit
 set -o nounset
 
-# POSIX compliant mode for GNU programs
+# enabling POSIX-compliant behavior for GNU programs
 export POSIXLY_CORRECT=yes POSIX_ME_HARDER=yes
 
 # asserts that we're in a repository and at least one commit exists
 git --no-pager show 1> '/dev/null'
+
+if [ -n "${GIT_EXEC_PATH-}" ]; then
+	# when executing the script through git - i.e.: `git <command>`
+
+	argv0="$(basename -- "$0" && printf x)"
+	argv0="${argv0%"$(printf '\nx')"}"
+	argv0="git ${argv0#"git-"}"
+else
+	# when executing the script directly - i.e.: `git-<command>`
+
+	if [ "${0#/}" = "$0" ]; then
+		argv0="$0"
+	else
+		argv0="$(basename -- "$0" && printf x)"
+		argv0="${argv0%"$(printf '\nx')"}"
+	fi
+fi
+readonly argv0
+
+#endregion
 
 # $1: string
 # $2: char index
@@ -32,20 +61,6 @@ git_wip_dump_version() {
 		printf '%s' "-$git_wip_dump_version_pre_release"
 	fi
 }
-
-if [ -n "${GIT_EXEC_PATH-}" ]; then
-	# when executing script through git - i.e.: `git wip-dump`
-	argv0="$(basename "$0")"
-	argv0="git $(printf '%s' "$argv0" | sed -e s/'^git-\(..*\)$'/'\1'/)"
-else
-	# when executing script directly
-	argv0="$0"
-
-	if printf '%s' "$argv0" | grep -Eq '^/'; then
-		argv0="$(basename "$argv0")"
-	fi
-fi
-readonly argv0
 
 # region args
 
@@ -68,7 +83,7 @@ print_version_info() {
 	{
 		echo "git-wip-dump $(git_wip_dump_version)"
 		echo
-		echo 'Copyright (C) 2022 Michael Federczuk'
+		echo 'Copyright (C) 2024 Michael Federczuk'
 		echo
 		echo '    License MPL-2.0: Mozilla Public License 2.0 <https://www.mozilla.org/en-US/MPL/2.0/>'
 		echo '            AND'
