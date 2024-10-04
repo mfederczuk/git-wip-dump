@@ -69,35 +69,29 @@ git_wip_dump_version() {
 # region args
 
 print_usage() {
-	{
-		echo "usage: $argv0 save [--push]"
-		echo "   or: $argv0 restore"
-	} >&2
+	echo "usage: $argv0 save [--push]"
+	echo "   or: $argv0 restore"
 }
 
 print_help() {
 	print_usage
-	{
-		echo
-		echo '    --push                also push the created commit to the tracked upstream'
-	} >&2
+	echo
+	echo '    --push                also push the created commit to the tracked upstream'
 }
 
 print_version_info() {
-	{
-		echo "git-wip-dump $(git_wip_dump_version)"
-		echo
-		echo 'Copyright (C) 2024 Michael Federczuk'
-		echo
-		echo '    License MPL-2.0: Mozilla Public License 2.0 <https://www.mozilla.org/en-US/MPL/2.0/>'
-		echo '            AND'
-		echo '    License Apache-2.0: Apache License 2.0 <https://www.apache.org/licenses/LICENSE-2.0>'
-		echo
-		echo 'This is free software: you are free to change and redistribute it.'
-		echo 'There is NO WARRANTY, to the extent permitted by law.'
-		echo
-		echo 'Written by Michael Federczuk.'
-	} >&2
+	echo "git-wip-dump $(git_wip_dump_version)"
+	echo
+	echo 'Copyright (C) 2024 Michael Federczuk'
+	echo
+	echo '    License MPL-2.0: Mozilla Public License 2.0 <https://www.mozilla.org/en-US/MPL/2.0/>'
+	echo '            AND'
+	echo '    License Apache-2.0: Apache License 2.0 <https://www.apache.org/licenses/LICENSE-2.0>'
+	echo
+	echo 'This is free software: you are free to change and redistribute it.'
+	echo 'There is NO WARRANTY, to the extent permitted by law.'
+	echo
+	echo 'Written by Michael Federczuk.'
 }
 
 subcommand=''
@@ -195,19 +189,21 @@ done; unset -v arg
 unset -v process_opts
 
 if ! $subcommand_set; then
-	echo "$argv0: missing argument: ( save | restore )" >&2
-	print_usage
+	{
+		echo "$argv0: missing argument: ( save | restore )"
+		print_usage
+	} >&2
 	exit 3
 fi
 
 case "$subcommand" in
 	('')
 		if [ $excess_argc -eq 0 ]; then
-			echo "$argv0: argument must not be empty" >&2
+			echo "$argv0: argument must not be empty"
 		else
-			echo "$argv0: argument #1: must not be empty" >&2
-		fi
-		print_usage
+			echo "$argv0: argument #1: must not be empty"
+		fi >&2
+		print_usage >&2
 
 		exit 9
 		;;
@@ -220,8 +216,10 @@ case "$subcommand" in
 				# ok
 				;;
 			("$opt_push_yes")
-				echo "$argv0: restore: --push: invalid option" >&2
-				print_usage
+				{
+					echo "$argv0: restore: --push: invalid option"
+					print_usage
+				} >&2
 				exit 5
 				;;
 			("$opt_push_no")
@@ -231,15 +229,19 @@ case "$subcommand" in
 		esac
 		;;
 	(*)
-		echo "$argv0: $subcommand: unknown subcommand" >&2
-		print_usage
+		{
+			echo "$argv0: $subcommand: unknown subcommand"
+			print_usage
+		} >&2
 		exit 8
 		;;
 esac
 
 if [ $excess_argc -gt 0 ]; then
-	echo "$argv0: too many arguments: $excess_argc" >&2
-	print_usage
+	{
+		echo "$argv0: too many arguments: $excess_argc"
+		print_usage
+	} >&2
 	exit 4
 fi
 
