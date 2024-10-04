@@ -1,6 +1,6 @@
 #!/bin/sh
 # -*- sh -*-
-# vim: set syntax=sh
+# vim: syntax=sh
 # code: language=shellscript
 
 # Copyright (c) 2022 Michael Federczuk
