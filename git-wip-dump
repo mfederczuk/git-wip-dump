@@ -278,7 +278,7 @@ git_wip_dump_save() {
 
 git_wip_dump_restore() {
 	if ! git show --no-patch --pretty=format:%b HEAD | grep -Eq '^\[git-wip-dump:[[:space:]]*v0+\.[0-9]+\.[0-9]+(-(indev|rc)[0-9]+)?\]$'; then
-		printf 'this does not appear to be WIP commit created by git-wip-dump. Continue? [y/N] ' >&2
+		printf 'The currently checked out commit does not appear to be WIP commit created by git-wip-dump. Continue anyway? [y/N] ' >&2
 
 		read -r ans
 		case "$ans" in
@@ -286,7 +286,7 @@ git_wip_dump_restore() {
 				# continue
 				;;
 			(*)
-				printf 'aborted.\n' >&2
+				printf 'Aborted.\n' >&2
 				exit 32
 				;;
 		esac
@@ -295,7 +295,7 @@ git_wip_dump_restore() {
 	parent_commit_hashes="$(git show --no-patch --pretty=format:%P HEAD)"
 
 	if printf '%s' "$parent_commit_hashes" | grep -Eq '[^0-9a-fA-F]'; then
-		printf 'fatal: HEAD has multiple parents (is a merge). aborting.\n' >&2
+		printf '%s: currently checked out commit is a merge commit. Aborting.\n' "$argv0" >&2
 		exit 33
 	fi
 
