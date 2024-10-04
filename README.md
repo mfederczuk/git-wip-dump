@@ -5,9 +5,9 @@
 
 # git-wip-dump #
 
-[version_shield]: https://img.shields.io/badge/version-0.1.0-informational.svg
-[release_page]: https://github.com/mfederczuk/git-wip-dump/releases/tag/v0.1.0 "Release v0.1.0"
-[![version: 0.1.0][version_shield]][release_page]
+[version_shield]: https://img.shields.io/badge/version-0.2.0-informational.svg
+[release_page]: https://github.com/mfederczuk/git-wip-dump/releases/tag/v0.2.0 "Release v0.2.0"
+[![version: 0.2.0][version_shield]][release_page]
 [![Changelog](https://img.shields.io/badge/-Changelog-informational.svg)](CHANGELOG.md "Changelog")
 
 ## About ##
