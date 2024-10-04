@@ -25,6 +25,6 @@ and this project adheres to [**Semantic Versioning v2.0.0**](https://semver.org/
 
 ## [v0.1.0] - 2022-07-26 ##
 
-[v0.1.0]: https://github.com/mfederczuk/git-wip-dump/releases/tag/v0.1.0}
+[v0.1.0]: https://github.com/mfederczuk/git-wip-dump/releases/tag/v0.1.0
 
 Initial Release
