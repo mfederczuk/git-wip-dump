@@ -21,8 +21,12 @@ set -o nounset
 # enabling POSIX-compliant behavior for GNU programs
 export POSIXLY_CORRECT=yes POSIX_ME_HARDER=yes
 
+git() {
+	command git --no-pager "$@"
+}
+
 # asserts that we're in a repository and at least one commit exists
-git --no-pager show 1> '/dev/null'
+git show 1> '/dev/null'
 
 if [ -n "${GIT_EXEC_PATH-}" ]; then
 	# when executing the script through git - i.e.: `git <command>`
@@ -252,26 +256,26 @@ git_wip_dump_save() {
 	nl="$(printf '\nx')"
 	nl="${nl%x}"
 
-	commit_hash="$(git --no-pager show --no-patch --pretty=format:%h HEAD)"
+	commit_hash="$(git show --no-patch --pretty=format:%h HEAD)"
 
 	commit_message_subject_line='::: Temporary Commit - WIP Changes :::'
 	commit_message_body_paragraph1="Use${nl}        git reset --mixed ${commit_hash}${nl}to reset this commit and continue working."
 	commit_message_body_paragraph2="[git-wip-dump: v$(git_wip_dump_version)]"
 
-	git --no-pager add --all
+	git add --all
 
-	git --no-pager commit --no-verify \
-	                      --message="$commit_message_subject_line"    \
-	                      --message="$commit_message_body_paragraph1" \
-	                      --message="$commit_message_body_paragraph2"
+	git commit --no-verify \
+	           --message="$commit_message_subject_line"    \
+	           --message="$commit_message_body_paragraph1" \
+	           --message="$commit_message_body_paragraph2"
 
 	if [ "$opt_push" = "$opt_push_yes" ]; then
-		git --no-pager push --force --verbose --no-verify
+		git push --force --verbose --no-verify
 	fi
 }
 
 git_wip_dump_restore() {
-	if ! git --no-pager show --no-patch --pretty=format:%b HEAD | grep -Eq '^\[git-wip-dump:[[:space:]]*v0+\.[0-9]+\.[0-9]+(-(indev|rc)[0-9]+)?\]$'; then
+	if ! git show --no-patch --pretty=format:%b HEAD | grep -Eq '^\[git-wip-dump:[[:space:]]*v0+\.[0-9]+\.[0-9]+(-(indev|rc)[0-9]+)?\]$'; then
 		printf 'this does not appear to be WIP commit created by git-wip-dump. Continue? [y/N] ' >&2
 
 		read -r ans
@@ -286,14 +290,14 @@ git_wip_dump_restore() {
 		esac
 	fi
 
-	parent_commit_hashes="$(git --no-pager show --no-patch --pretty=format:%P HEAD)"
+	parent_commit_hashes="$(git show --no-patch --pretty=format:%P HEAD)"
 
 	if printf '%s' "$parent_commit_hashes" | grep -Eq '[^0-9a-fA-F]'; then
 		echo "fatal: HEAD has multiple parents (is a merge). aborting." >&2
 		exit 33
 	fi
 
-	git --no-pager reset --mixed "$parent_commit_hashes"
+	git reset --mixed "$parent_commit_hashes"
 }
 
 case "$subcommand" in
