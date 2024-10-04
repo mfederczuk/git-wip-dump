@@ -16,6 +16,8 @@ and this project adheres to [**Semantic Versioning v2.0.0**](https://semver.org/
 ### Added ###
 
 * The commit message is now customizable using the Git config `wip-dump.message`
+* The commit hooks (`pre-commit` and `commit-msg`) can now be enabled using
+  the Git config `wip-dump.commit-hooks-enabled`
 
 ### Changed ###
 

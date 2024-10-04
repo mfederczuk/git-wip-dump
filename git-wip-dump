@@ -277,6 +277,12 @@ get_wip_commit_message() {
 	printf '%s' "$2" | sed s/'{commit_hash}'/"$1"/g
 }
 
+are_commit_hooks_enabled() {
+	set -- "$(git config get --type=bool --default='false' wip-dump.commit-hooks-enabled)"
+
+	test "$1" = 'true'
+}
+
 git_wip_dump_save() {
 	set -- "$(git show --no-patch --pretty=format:%h HEAD)"
 	set -- "$(get_wip_commit_message "$1")"
@@ -285,7 +291,13 @@ git_wip_dump_save() {
 
 	git add --all
 
-	git commit --no-verify --message="$1" --message="$2"
+	if are_commit_hooks_enabled; then
+		set -- "$1" "$2" ''
+	else
+		set -- "$1" "$2" '--no-verify'
+	fi
+	# shellcheck disable=SC2086
+	git commit $3 --message="$1" --message="$2"
 
 	if [ "$opt_push" = "$opt_push_yes" ]; then
 		git push --force --verbose --no-verify
