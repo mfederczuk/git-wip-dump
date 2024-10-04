@@ -21,6 +21,13 @@ the WIP commit again.
 
 With `save`, the option `--push` can also be given to also push the commit to the tracked upstream branch.
 
+The commit message can be customized by setting the Git config `wip-dump.message`.  
+In that message, the placeholder `{commit_hash}` will be replaced with the short hash of the commit before
+the WIP commit.
+
+By default, the created WIP commit will skip both the `pre-commit` and the `commit-msg` hooks.  
+The hooks can be re-enabled by setting the config `wip-dump.commit-hooks-enabled` to `true`.
+
 ## Download & Installation ##
 
 Simply download the [`git-wip-dump`](git-wip-dump) file and place it into a directory that is inside your `PATH`
